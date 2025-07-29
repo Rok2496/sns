@@ -2,6 +2,7 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   images: {
     domains: ['www.snsbd.com', 'localhost'],
     unoptimized: true
