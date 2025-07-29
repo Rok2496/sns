@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   images: {
     domains: ['www.snsbd.com', 'localhost'],
     unoptimized: true
