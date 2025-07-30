@@ -1,7 +1,8 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://sns-38a5.onrender.com';
+// For static exports, we need to hardcode the production URL
+const API_BASE_URL = 'https://sns-38a5.onrender.com';
 
 // Create axios instance
 const api = axios.create({

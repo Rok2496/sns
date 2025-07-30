@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.API_BASE_URL || 'https://sns-38a5.onrender.com';
+// For static exports, we need to hardcode the production URL
+const API_BASE_URL = 'https://sns-38a5.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
