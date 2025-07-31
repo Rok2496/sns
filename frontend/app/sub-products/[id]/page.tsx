@@ -1,25 +1,21 @@
 import SubProductDetailClient from './SubProductDetailClient';
 
-// Generate static params for static export
+// For static export, we'll generate some common static params
+// but allow dynamic params for any other IDs
 export async function generateStaticParams() {
-  try {
-    // Fetch actual sub-product IDs from the API
-    const response = await fetch('https://sns-38a5.onrender.com/public/sub-products');
-    if (!response.ok) {
-      throw new Error('Failed to fetch sub-products');
-    }
-    const subProducts = await response.json();
-    
-    // Return actual IDs from the database
-    return subProducts.map((subProduct: any) => ({
-      id: subProduct.id.toString(),
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    // Return empty array if API is not available during build
-    return [];
-  }
+  // Return a few common static params to satisfy Next.js static export requirements
+  // These will be pre-generated at build time
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+    { id: '4' },
+    { id: '5' },
+  ];
 }
+
+// Enable dynamic routing for IDs not in generateStaticParams
+export const dynamicParams = true;
 
 export default function SubProductDetailPage() {
   return <SubProductDetailClient />;
