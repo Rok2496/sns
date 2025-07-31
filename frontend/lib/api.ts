@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-// Local development API URL
-const API_BASE_URL = 'http://localhost:8000';
+// Production API URL
+const API_BASE_URL = 'https://sns-38a5.onrender.com';
 
-// Production API URL (commented out)
-// const API_BASE_URL = 'https://sns-38a5.onrender.com';
+// Local development API URL (commented out)
+// const API_BASE_URL = 'http://localhost:8000';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -1,0 +1,50 @@
+services:
+  # Backend API
+  - type: web
+    name: sns-backend
+    env: python
+    region: oregon
+    buildCommand: cd Backend && pip install -r requirements.txt
+    startCommand: cd Backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        sync: false
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_EMAIL
+        value: admin@snsbd.com
+      - key: DEBUG
+        value: false
+      - key: ENVIRONMENT
+        value: production
+      - key: API_BASE_URL
+        value: https://sns-38a5.onrender.com
+      - key: CORS_ORIGINS
+        value: '["https://sns-frontend.netlify.app","https://sns-admin.netlify.app","https://sns-38a5.onrender.com"]'
+
+  # PostgreSQL Database
+  - type: pserv
+    name: sns-database
+    env: postgresql
+    region: oregon
+    plan: free
+    ipAllowList: []
+
+# Static site for admin frontend
+  - type: web
+    name: sns-admin-frontend
+    env: static
+    region: oregon
+    buildCommand: cd admin-frontend && npm install && npm run build
+    staticPublishPath: admin-frontend/out
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://sns-38a5.onrender.com
+      - key: API_BASE_URL
+        value: https://sns-38a5.onrender.com
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: https://sns-38a5.onrender.com

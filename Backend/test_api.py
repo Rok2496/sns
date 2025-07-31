@@ -8,7 +8,11 @@ import requests
 import json
 import sys
 
-BASE_URL = "http://localhost:8000"
+# Production API URL
+BASE_URL = "https://sns-38a5.onrender.com"
+
+# Local development API URL (commented out)
+# BASE_URL = "http://localhost:8000"
 
 def test_health():
     """Test health endpoint"""
@@ -117,7 +121,7 @@ def main():
     
     print("\n" + "=" * 50)
     print("🎉 API testing completed!")
-    print("\n📚 Access API documentation at: http://localhost:8000/docs")
+    print(f"\n📚 Access API documentation at: {BASE_URL}/docs")
 
 if __name__ == "__main__":
     main()

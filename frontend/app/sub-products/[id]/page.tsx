@@ -4,7 +4,7 @@ import SubProductDetailClient from './SubProductDetailClient';
 export async function generateStaticParams() {
   try {
     // Fetch actual sub-product IDs from the API
-    const response = await fetch('http://localhost:8000/public/sub-products');
+    const response = await fetch('https://sns-38a5.onrender.com/public/sub-products');
     if (!response.ok) {
       throw new Error('Failed to fetch sub-products');
     }
