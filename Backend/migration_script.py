@@ -181,9 +181,244 @@ def create_products(db: Session, categories):
         }
     ]
     
+    created_products = {}
     for prod_data in products_data:
         product = crud.create_product(db, schemas.ProductCreate(**prod_data))
+        created_products[product.name] = product
         print(f"Created product: {product.name}")
+    
+    return created_products
+
+
+def create_sub_products(db: Session, products):
+    """Create sub-products with ecommerce-style information"""
+    sub_products_data = [
+        # Cisco Network Equipment Sub-products
+        {
+            "name": "Cisco Catalyst 9300 Series Switch",
+            "description": "High-performance enterprise switch with advanced security features",
+            "product_id": products["Cisco Network Equipment"].id,
+            "sku": "C9300-48P-A",
+            "brand": "Cisco",
+            "model": "Catalyst 9300-48P",
+            "specifications": json.dumps({
+                "ports": "48 x 10/100/1000 Ethernet ports",
+                "uplinks": "4 x 10G SFP+ uplinks",
+                "switching_capacity": "176 Gbps",
+                "forwarding_rate": "130.95 Mpps",
+                "power_consumption": "435W",
+                "dimensions": "44.5 x 44.5 x 4.4 cm"
+            }),
+            "features": json.dumps([
+                "StackWise-480 technology",
+                "Cisco DNA Center ready",
+                "Advanced security features",
+                "Energy efficient design",
+                "Hot-swappable components"
+            ]),
+            "images": json.dumps([
+                "https://www.cisco.com/c/dam/en/us/products/collateral/switches/catalyst-9300-series-switches/catalyst-9300-series-switches-ds.jpg"
+            ]),
+            "price_range": "$3,000 - $5,000",
+            "availability_status": "Available",
+            "warranty_info": "Limited lifetime hardware warranty",
+            "support_info": "24/7 Cisco TAC support available",
+            "documentation_url": "https://www.cisco.com/c/en/us/products/switches/catalyst-9300-series-switches/",
+            "datasheet_url": "https://www.cisco.com/c/en/us/products/collateral/switches/catalyst-9300-series-switches/nb-06-cat9300-ser-data-sheet-cte-en.html",
+            "tags": json.dumps(["enterprise", "switch", "network", "cisco", "catalyst"]),
+            "meta_title": "Cisco Catalyst 9300 Series Switch - Enterprise Network Switch",
+            "meta_description": "High-performance Cisco Catalyst 9300 series switch with 48 ports and advanced security features for enterprise networks.",
+            "is_featured": True,
+            "sort_order": 1
+        },
+        {
+            "name": "Cisco ASR 1000 Series Router",
+            "description": "Enterprise-class aggregation services router",
+            "product_id": products["Cisco Network Equipment"].id,
+            "sku": "ASR1001-X",
+            "brand": "Cisco",
+            "model": "ASR 1001-X",
+            "specifications": json.dumps({
+                "throughput": "Up to 20 Gbps",
+                "interfaces": "6 built-in GE ports",
+                "expansion_slots": "2 x SPA slots",
+                "memory": "8 GB DRAM",
+                "storage": "8 GB eUSB",
+                "power_consumption": "550W"
+            }),
+            "features": json.dumps([
+                "High availability design",
+                "Advanced QoS capabilities",
+                "Integrated security features",
+                "Flexible interface options",
+                "Carrier-grade reliability"
+            ]),
+            "images": json.dumps([
+                "https://www.cisco.com/c/dam/en/us/products/routers/asr-1000-series-aggregation-services-routers/asr-1000-hero.jpg"
+            ]),
+            "price_range": "$15,000 - $25,000",
+            "availability_status": "Available",
+            "warranty_info": "1-year limited hardware warranty",
+            "support_info": "Cisco SmartNet support recommended",
+            "documentation_url": "https://www.cisco.com/c/en/us/products/routers/asr-1000-series-aggregation-services-routers/",
+            "tags": json.dumps(["router", "enterprise", "cisco", "asr", "aggregation"]),
+            "is_featured": True,
+            "sort_order": 2
+        },
+        
+        # Fortinet Security Solutions Sub-products
+        {
+            "name": "FortiGate 100F Next-Generation Firewall",
+            "description": "Compact next-generation firewall for small to medium businesses",
+            "product_id": products["Fortinet Security Solutions"].id,
+            "sku": "FG-100F",
+            "brand": "Fortinet",
+            "model": "FortiGate 100F",
+            "specifications": json.dumps({
+                "firewall_throughput": "10 Gbps",
+                "threat_protection_throughput": "1.8 Gbps",
+                "ipsec_vpn_throughput": "9 Gbps",
+                "concurrent_sessions": "500,000",
+                "interfaces": "14 x GE RJ45 ports, 2 x SFP slots",
+                "power_consumption": "65W"
+            }),
+            "features": json.dumps([
+                "AI-powered security",
+                "Advanced threat protection",
+                "SD-WAN capabilities",
+                "SSL inspection",
+                "Application control",
+                "Web filtering"
+            ]),
+            "images": json.dumps([
+                "https://www.fortinet.com/content/dam/fortinet/images/products/fortigate/fortigate-100f.jpg"
+            ]),
+            "price_range": "$2,500 - $4,000",
+            "availability_status": "Available",
+            "warranty_info": "1-year hardware warranty",
+            "support_info": "FortiCare support services available",
+            "documentation_url": "https://www.fortinet.com/products/next-generation-firewall",
+            "datasheet_url": "https://www.fortinet.com/content/dam/fortinet/assets/data-sheets/fortigate-100f.pdf",
+            "tags": json.dumps(["firewall", "security", "fortinet", "ngfw", "threat-protection"]),
+            "is_featured": True,
+            "sort_order": 1
+        },
+        
+        # Hikvision CCTV Systems Sub-products
+        {
+            "name": "Hikvision DS-2CD2385G1-I 8MP IP Camera",
+            "description": "8MP outdoor bullet IP camera with IR illumination",
+            "product_id": products["Hikvision CCTV Systems"].id,
+            "sku": "DS-2CD2385G1-I",
+            "brand": "Hikvision",
+            "model": "DS-2CD2385G1-I",
+            "specifications": json.dumps({
+                "resolution": "8MP (3840 × 2160)",
+                "lens": "2.8mm, 4mm, 6mm fixed lens",
+                "ir_range": "Up to 30m",
+                "compression": "H.265+/H.265/H.264+/H.264",
+                "power": "12V DC, PoE+",
+                "operating_temperature": "-40°C to 60°C"
+            }),
+            "features": json.dumps([
+                "4K Ultra HD resolution",
+                "Smart IR technology",
+                "WDR (Wide Dynamic Range)",
+                "3D DNR (Digital Noise Reduction)",
+                "IP67 weatherproof rating",
+                "ONVIF compliant"
+            ]),
+            "images": json.dumps([
+                "https://www.hikvision.com/content/dam/hikvision/products/S000000001/S000000002/S000000003/DS-2CD2385G1-I.jpg"
+            ]),
+            "price_range": "$200 - $350",
+            "availability_status": "Available",
+            "warranty_info": "3-year manufacturer warranty",
+            "support_info": "Technical support and firmware updates",
+            "documentation_url": "https://www.hikvision.com/en/products/IP-Products/Network-Cameras/",
+            "tags": json.dumps(["ip-camera", "surveillance", "hikvision", "8mp", "outdoor"]),
+            "is_featured": True,
+            "sort_order": 1
+        },
+        
+        # ZKTeco Access Control Sub-products
+        {
+            "name": "ZKTeco SpeedFace-V5L Facial Recognition Terminal",
+            "description": "Advanced facial recognition access control terminal",
+            "product_id": products["ZKTeco Access Control"].id,
+            "sku": "SpeedFace-V5L",
+            "brand": "ZKTeco",
+            "model": "SpeedFace-V5L",
+            "specifications": json.dumps({
+                "display": "4.3-inch touch screen",
+                "camera": "Wide-angle dual camera",
+                "face_capacity": "3,000 faces",
+                "card_capacity": "10,000 cards",
+                "transaction_capacity": "200,000",
+                "communication": "TCP/IP, WiFi, USB"
+            }),
+            "features": json.dumps([
+                "Visible light facial recognition",
+                "Anti-spoofing algorithm",
+                "Mask detection",
+                "Temperature measurement",
+                "Multiple authentication modes",
+                "Mobile app support"
+            ]),
+            "images": json.dumps([
+                "https://www.zkteco.com/uploads/product/SpeedFace-V5L.jpg"
+            ]),
+            "price_range": "$800 - $1,200",
+            "availability_status": "Available",
+            "warranty_info": "2-year manufacturer warranty",
+            "support_info": "Technical support and software updates",
+            "documentation_url": "https://www.zkteco.com/product/speedface-v5l",
+            "tags": json.dumps(["access-control", "facial-recognition", "zkteco", "biometric", "terminal"]),
+            "is_featured": True,
+            "sort_order": 1
+        },
+        
+        # Dell EMC Storage Solutions Sub-products
+        {
+            "name": "Dell PowerVault ME4024 Storage Array",
+            "description": "Entry-level SAN storage array for small to medium businesses",
+            "product_id": products["Dell EMC Storage Solutions"].id,
+            "sku": "ME4024",
+            "brand": "Dell EMC",
+            "model": "PowerVault ME4024",
+            "specifications": json.dumps({
+                "drive_bays": "24 x 2.5-inch drive bays",
+                "max_capacity": "576 TB",
+                "controllers": "Dual active-active controllers",
+                "host_interfaces": "16Gb FC, 10Gb iSCSI, 12Gb SAS",
+                "cache": "8 GB per controller",
+                "power": "Redundant power supplies"
+            }),
+            "features": json.dumps([
+                "Automated tiering",
+                "Thin provisioning",
+                "Snapshot capabilities",
+                "Replication support",
+                "Easy management interface",
+                "High availability design"
+            ]),
+            "images": json.dumps([
+                "https://www.dell.com/content/dam/global-site-design/product_images/dell_emc_storage/powervault/me4024.jpg"
+            ]),
+            "price_range": "$8,000 - $15,000",
+            "availability_status": "Available",
+            "warranty_info": "3-year ProSupport warranty",
+            "support_info": "Dell EMC support services",
+            "documentation_url": "https://www.dell.com/en-us/work/shop/povw/powervault-me4024",
+            "tags": json.dumps(["storage", "san", "dell-emc", "powervault", "array"]),
+            "is_featured": True,
+            "sort_order": 1
+        }
+    ]
+    
+    for sub_prod_data in sub_products_data:
+        sub_product = crud.create_sub_product(db, schemas.SubProductCreate(**sub_prod_data))
+        print(f"Created sub-product: {sub_product.name}")
 
 
 def create_services(db: Session, categories):
@@ -366,7 +601,10 @@ def main():
         categories = create_categories(db)
         
         # Create products
-        create_products(db, categories)
+        products = create_products(db, categories)
+        
+        # Create sub-products
+        create_sub_products(db, products)
         
         # Create services
         create_services(db, categories)
@@ -379,6 +617,7 @@ def main():
         
         print("\nMigration completed successfully!")
         print(f"Admin login: {settings.admin_username} / {settings.admin_password}")
+        print("Sub-products with ecommerce-style information have been created!")
         
     except Exception as e:
         print(f"Migration failed: {e}")

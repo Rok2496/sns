@@ -25,6 +25,10 @@ class Settings(BaseSettings):
     app_name: str = "SNS Backend API"
     app_version: str = "1.0.0"
     debug: bool = True
+    
+    # Default Images Configuration
+    default_product_image: str = "https://picsum.photos/400/300?random=1"
+    default_logo_image: str = "https://picsum.photos/200/100?random=2"
 
     class Config:
         env_file = ".env"

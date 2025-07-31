@@ -1,8 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// For static exports, we need to hardcode the production URL
-const API_BASE_URL = 'https://sns-38a5.onrender.com';
+// Local development API URL
+const API_BASE_URL = 'http://localhost:8000';
+
+// Production API URL (commented out)
+// const API_BASE_URL = 'https://sns-38a5.onrender.com';
 
 // Create axios instance
 const api = axios.create({
@@ -55,6 +58,16 @@ export const adminAPI = {
   updateProduct: (id: number, data: ProductUpdate) => api.put(`/admin/products/${id}`, data),
   deleteProduct: (id: number) => api.delete(`/admin/products/${id}`),
 
+  // SubProducts
+  getSubProducts: (productId?: number) => api.get('/admin/sub-products', { params: { product_id: productId } }),
+  getSubProduct: (id: number) => api.get(`/admin/sub-products/${id}`),
+  getSubProductsByProduct: (productId: number) => api.get(`/admin/products/${productId}/sub-products`),
+  getFeaturedSubProducts: (limit?: number) => api.get('/admin/sub-products/featured', { params: { limit } }),
+  searchSubProducts: (query: string, skip?: number, limit?: number) => api.get('/admin/sub-products/search', { params: { q: query, skip, limit } }),
+  createSubProduct: (data: SubProductCreate) => api.post('/admin/sub-products', data),
+  updateSubProduct: (id: number, data: SubProductUpdate) => api.put(`/admin/sub-products/${id}`, data),
+  deleteSubProduct: (id: number) => api.delete(`/admin/sub-products/${id}`),
+
   // Services
   getServices: () => api.get('/admin/services'),
   getService: (id: number) => api.get(`/admin/services/${id}`),
@@ -79,6 +92,9 @@ export const adminAPI = {
   // Company Info
   getCompanyInfo: () => api.get('/admin/company-info'),
   updateCompanyInfo: (data: CompanyInfoUpdate) => api.put('/admin/company-info', data),
+  
+  // Default Images
+  getDefaultImages: () => api.get('/public/default-images'),
 };
 
 // Types
@@ -127,6 +143,84 @@ export interface ProductUpdate {
   category_id?: number;
   image_url?: string;
   is_active?: boolean;
+}
+
+export interface SubProduct {
+  id: number;
+  name: string;
+  description: string;
+  product_id: number;
+  sku: string;
+  brand: string;
+  model: string;
+  specifications: string;
+  features: string;
+  images: string;
+  price_range: string;
+  currency: string;
+  availability_status: string;
+  warranty_info: string;
+  support_info: string;
+  documentation_url: string;
+  datasheet_url: string;
+  tags: string;
+  meta_title: string;
+  meta_description: string;
+  is_active: boolean;
+  is_featured: boolean;
+  sort_order: number;
+  created_at: string;
+  updated_at: string | null;
+  product?: Product;
+}
+
+export interface SubProductCreate {
+  name: string;
+  description?: string;
+  product_id: number;
+  sku?: string;
+  brand?: string;
+  model?: string;
+  specifications?: string;
+  features?: string;
+  images?: string;
+  price_range?: string;
+  currency?: string;
+  availability_status?: string;
+  warranty_info?: string;
+  support_info?: string;
+  documentation_url?: string;
+  datasheet_url?: string;
+  tags?: string;
+  meta_title?: string;
+  meta_description?: string;
+  is_featured?: boolean;
+  sort_order?: number;
+}
+
+export interface SubProductUpdate {
+  name?: string;
+  description?: string;
+  product_id?: number;
+  sku?: string;
+  brand?: string;
+  model?: string;
+  specifications?: string;
+  features?: string;
+  images?: string;
+  price_range?: string;
+  currency?: string;
+  availability_status?: string;
+  warranty_info?: string;
+  support_info?: string;
+  documentation_url?: string;
+  datasheet_url?: string;
+  tags?: string;
+  meta_title?: string;
+  meta_description?: string;
+  is_active?: boolean;
+  is_featured?: boolean;
+  sort_order?: number;
 }
 
 export interface Service {

@@ -114,6 +114,73 @@ def delete_product(db: Session, product_id: int):
     return db_product
 
 
+# SubProduct CRUD
+def get_sub_products(db: Session, skip: int = 0, limit: int = 100, product_id: Optional[int] = None):
+    query = db.query(models.SubProduct)
+    if product_id:
+        query = query.filter(models.SubProduct.product_id == product_id)
+    return query.offset(skip).limit(limit).all()
+
+
+def get_sub_product(db: Session, sub_product_id: int):
+    return db.query(models.SubProduct).filter(models.SubProduct.id == sub_product_id).first()
+
+
+def get_sub_products_by_product(db: Session, product_id: int):
+    return db.query(models.SubProduct).filter(
+        and_(models.SubProduct.product_id == product_id, models.SubProduct.is_active == True)
+    ).order_by(models.SubProduct.sort_order, models.SubProduct.name).all()
+
+
+def get_featured_sub_products(db: Session, limit: int = 10):
+    return db.query(models.SubProduct).filter(
+        and_(models.SubProduct.is_featured == True, models.SubProduct.is_active == True)
+    ).order_by(models.SubProduct.sort_order, models.SubProduct.name).limit(limit).all()
+
+
+def create_sub_product(db: Session, sub_product: schemas.SubProductCreate):
+    db_sub_product = models.SubProduct(**sub_product.dict())
+    db.add(db_sub_product)
+    db.commit()
+    db.refresh(db_sub_product)
+    return db_sub_product
+
+
+def update_sub_product(db: Session, sub_product_id: int, sub_product_update: schemas.SubProductUpdate):
+    db_sub_product = db.query(models.SubProduct).filter(models.SubProduct.id == sub_product_id).first()
+    if db_sub_product:
+        update_data = sub_product_update.dict(exclude_unset=True)
+        for field, value in update_data.items():
+            setattr(db_sub_product, field, value)
+        db.commit()
+        db.refresh(db_sub_product)
+    return db_sub_product
+
+
+def delete_sub_product(db: Session, sub_product_id: int):
+    db_sub_product = db.query(models.SubProduct).filter(models.SubProduct.id == sub_product_id).first()
+    if db_sub_product:
+        db.delete(db_sub_product)
+        db.commit()
+    return db_sub_product
+
+
+def search_sub_products(db: Session, query: str, skip: int = 0, limit: int = 100):
+    """Search sub products by name, brand, model, or tags"""
+    search_filter = f"%{query}%"
+    return db.query(models.SubProduct).filter(
+        and_(
+            models.SubProduct.is_active == True,
+            (
+                models.SubProduct.name.ilike(search_filter) |
+                models.SubProduct.brand.ilike(search_filter) |
+                models.SubProduct.model.ilike(search_filter) |
+                models.SubProduct.tags.ilike(search_filter)
+            )
+        )
+    ).offset(skip).limit(limit).all()
+
+
 # Service CRUD
 def get_services(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Service).offset(skip).limit(limit).all()

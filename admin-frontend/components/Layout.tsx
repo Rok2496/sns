@@ -14,6 +14,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   ArrowRightOnRectangleIcon,
+  ShoppingBagIcon,
 } from '@heroicons/react/24/outline';
 import { removeAuthToken } from '@/lib/auth';
 import toast from 'react-hot-toast';
@@ -22,6 +23,7 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { name: 'Categories', href: '/categories', icon: TagIcon },
   { name: 'Products', href: '/products', icon: CubeIcon },
+  { name: 'Sub Products', href: '/sub-products', icon: ShoppingBagIcon },
   { name: 'Services', href: '/services', icon: WrenchScrewdriverIcon },
   { name: 'Solutions', href: '/solutions', icon: LightBulbIcon },
   { name: 'Customers', href: '/customers', icon: UsersIcon },

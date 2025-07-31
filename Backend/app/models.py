@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, Numeric
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -45,6 +45,49 @@ class Product(Base):
     
     # Relationships
     category = relationship("Category", back_populates="products")
+    sub_products = relationship("SubProduct", back_populates="product", cascade="all, delete-orphan")
+
+
+class SubProduct(Base):
+    __tablename__ = "sub_products"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(200), nullable=False)
+    description = Column(Text)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    
+    # Ecommerce-style fields
+    sku = Column(String(100), unique=True, index=True)  # Stock Keeping Unit
+    brand = Column(String(100))
+    model = Column(String(100))
+    specifications = Column(Text)  # JSON string of technical specs
+    features = Column(Text)  # JSON string of features
+    images = Column(Text)  # JSON array of image URLs
+    
+    # Informational pricing (for display only, no actual selling)
+    price_range = Column(String(100))  # e.g., "$1000 - $2000"
+    currency = Column(String(10), default="USD")
+    
+    # Additional ecommerce-style info
+    availability_status = Column(String(50), default="Available")  # Available, Out of Stock, Discontinued
+    warranty_info = Column(Text)
+    support_info = Column(Text)
+    documentation_url = Column(String(500))
+    datasheet_url = Column(String(500))
+    
+    # SEO and categorization
+    tags = Column(Text)  # JSON array of tags
+    meta_title = Column(String(200))
+    meta_description = Column(Text)
+    
+    is_active = Column(Boolean, default=True)
+    is_featured = Column(Boolean, default=False)
+    sort_order = Column(Integer, default=0)
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
+    # Relationships
+    product = relationship("Product", back_populates="sub_products")
 
 
 class Service(Base):

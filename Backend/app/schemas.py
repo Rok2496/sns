@@ -87,6 +87,70 @@ class Product(ProductBase):
         from_attributes = True
 
 
+# SubProduct Schemas
+class SubProductBase(BaseModel):
+    name: str
+    description: Optional[str] = None
+    product_id: int
+    sku: Optional[str] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    specifications: Optional[str] = None
+    features: Optional[str] = None
+    images: Optional[str] = None
+    price_range: Optional[str] = None
+    currency: Optional[str] = "USD"
+    availability_status: Optional[str] = "Available"
+    warranty_info: Optional[str] = None
+    support_info: Optional[str] = None
+    documentation_url: Optional[str] = None
+    datasheet_url: Optional[str] = None
+    tags: Optional[str] = None
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    is_featured: Optional[bool] = False
+    sort_order: Optional[int] = 0
+
+
+class SubProductCreate(SubProductBase):
+    pass
+
+
+class SubProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    product_id: Optional[int] = None
+    sku: Optional[str] = None
+    brand: Optional[str] = None
+    model: Optional[str] = None
+    specifications: Optional[str] = None
+    features: Optional[str] = None
+    images: Optional[str] = None
+    price_range: Optional[str] = None
+    currency: Optional[str] = None
+    availability_status: Optional[str] = None
+    warranty_info: Optional[str] = None
+    support_info: Optional[str] = None
+    documentation_url: Optional[str] = None
+    datasheet_url: Optional[str] = None
+    tags: Optional[str] = None
+    meta_title: Optional[str] = None
+    meta_description: Optional[str] = None
+    is_active: Optional[bool] = None
+    is_featured: Optional[bool] = None
+    sort_order: Optional[int] = None
+
+
+class SubProduct(SubProductBase):
+    id: int
+    is_active: bool
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True
+
+
 # Service Schemas
 class ServiceBase(BaseModel):
     name: str

@@ -88,6 +88,90 @@ def delete_product(product_id: int, db: Session = Depends(get_db)):
     return {"message": "Product deleted successfully"}
 
 
+# SubProduct endpoints
+@router.get("/sub-products", response_model=List[schemas.SubProduct])
+def read_sub_products(
+    skip: int = 0, 
+    limit: int = 100, 
+    product_id: int = None,
+    db: Session = Depends(get_db)
+):
+    sub_products = crud.get_sub_products(db, skip=skip, limit=limit, product_id=product_id)
+    return sub_products
+
+
+@router.get("/products/{product_id}/sub-products", response_model=List[schemas.SubProduct])
+def read_sub_products_by_product(product_id: int, db: Session = Depends(get_db)):
+    # Verify product exists
+    db_product = crud.get_product(db, product_id=product_id)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    sub_products = crud.get_sub_products_by_product(db, product_id=product_id)
+    return sub_products
+
+
+@router.get("/sub-products/featured", response_model=List[schemas.SubProduct])
+def read_featured_sub_products(limit: int = 10, db: Session = Depends(get_db)):
+    sub_products = crud.get_featured_sub_products(db, limit=limit)
+    return sub_products
+
+
+@router.get("/sub-products/search", response_model=List[schemas.SubProduct])
+def search_sub_products(
+    q: str, 
+    skip: int = 0, 
+    limit: int = 100, 
+    db: Session = Depends(get_db)
+):
+    sub_products = crud.search_sub_products(db, query=q, skip=skip, limit=limit)
+    return sub_products
+
+
+@router.post("/sub-products", response_model=schemas.SubProduct)
+def create_sub_product(sub_product: schemas.SubProductCreate, db: Session = Depends(get_db)):
+    # Verify product exists
+    db_product = crud.get_product(db, product_id=sub_product.product_id)
+    if db_product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    
+    return crud.create_sub_product(db=db, sub_product=sub_product)
+
+
+@router.get("/sub-products/{sub_product_id}", response_model=schemas.SubProduct)
+def read_sub_product(sub_product_id: int, db: Session = Depends(get_db)):
+    db_sub_product = crud.get_sub_product(db, sub_product_id=sub_product_id)
+    if db_sub_product is None:
+        raise HTTPException(status_code=404, detail="SubProduct not found")
+    return db_sub_product
+
+
+@router.put("/sub-products/{sub_product_id}", response_model=schemas.SubProduct)
+def update_sub_product(
+    sub_product_id: int, 
+    sub_product_update: schemas.SubProductUpdate, 
+    db: Session = Depends(get_db)
+):
+    # If product_id is being updated, verify the new product exists
+    if sub_product_update.product_id is not None:
+        db_product = crud.get_product(db, product_id=sub_product_update.product_id)
+        if db_product is None:
+            raise HTTPException(status_code=404, detail="Product not found")
+    
+    db_sub_product = crud.update_sub_product(db, sub_product_id=sub_product_id, sub_product_update=sub_product_update)
+    if db_sub_product is None:
+        raise HTTPException(status_code=404, detail="SubProduct not found")
+    return db_sub_product
+
+
+@router.delete("/sub-products/{sub_product_id}")
+def delete_sub_product(sub_product_id: int, db: Session = Depends(get_db)):
+    db_sub_product = crud.delete_sub_product(db, sub_product_id=sub_product_id)
+    if db_sub_product is None:
+        raise HTTPException(status_code=404, detail="SubProduct not found")
+    return {"message": "SubProduct deleted successfully"}
+
+
 # Service endpoints
 @router.get("/services", response_model=List[schemas.Service])
 def read_services(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
