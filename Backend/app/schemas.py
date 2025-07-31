@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from typing import Optional, List
 from datetime import datetime
 
@@ -6,7 +6,7 @@ from datetime import datetime
 # Admin Schemas
 class AdminBase(BaseModel):
     username: str
-    email: EmailStr
+    email: str
 
 
 class AdminCreate(AdminBase):
@@ -15,7 +15,7 @@ class AdminCreate(AdminBase):
 
 class AdminUpdate(BaseModel):
     username: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
     password: Optional[str] = None
     is_active: Optional[bool] = None
 
