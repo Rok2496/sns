@@ -27,7 +27,7 @@ class Admin(AdminBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Category Schemas
@@ -53,7 +53,7 @@ class Category(CategoryBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Product Schemas
@@ -84,7 +84,7 @@ class Product(ProductBase):
     category: Optional[Category] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # SubProduct Schemas
@@ -148,7 +148,7 @@ class SubProduct(SubProductBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Service Schemas
@@ -179,7 +179,7 @@ class Service(ServiceBase):
     category: Optional[Category] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Solution Schemas
@@ -207,7 +207,7 @@ class Solution(SolutionBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Customer Schemas
@@ -235,7 +235,7 @@ class Customer(CustomerBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Company Info Schemas
@@ -279,7 +279,7 @@ class CompanyInfo(CompanyInfoBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        from_attributes = True
+        orm_mode = True
 
 
 # Auth Schemas

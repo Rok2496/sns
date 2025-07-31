@@ -1,6 +1,7 @@
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings
 from typing import Optional, List
 import json
+import os
 
 
 class Settings(BaseSettings):
