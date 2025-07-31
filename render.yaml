@@ -4,7 +4,9 @@ services:
     name: sns-backend
     env: python
     region: oregon
-    buildCommand: cd Backend && pip install --upgrade pip && pip install --no-cache-dir --only-binary=all -r requirements.txt
+    plan: free
+    runtime: python
+    buildCommand: cd Backend && python --version && pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
     startCommand: cd Backend && uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
@@ -25,6 +27,8 @@ services:
         value: https://sns-38a5.onrender.com
       - key: CORS_ORIGINS
         value: '["https://sns-frontend.netlify.app","https://sns-admin.netlify.app","https://sns-38a5.onrender.com"]'
+      - key: PYTHON_VERSION
+        value: 3.10.12
 
   # PostgreSQL Database
   - type: pserv
